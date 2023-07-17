@@ -61,8 +61,12 @@ export const HomeForm = styled.form`
     padding-inline: 1em;
     cursor: pointer;
 
-    :hover {
+    :hover:not([disabled]) {
       background-color: rgba(0, 255, 0, 0.35);
+    }
+
+    :hover:is([disabled]) {
+      cursor: wait;
     }
   }
 `;
@@ -76,7 +80,7 @@ export const HomeResponse = styled.section`
   font-size: 16px;
 
   h5 {
-    font-weight: bold;
+    line-height: 1.2;
   }
 `;
 

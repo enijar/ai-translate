@@ -59,7 +59,11 @@ export default async function translate(req: Request, res: Response) {
       return res.status(404).json({ errors: [{ message: "No result" }] });
     }
 
-    res.json(result.choices[0].text);
+    res.json({
+      text: data.text,
+      language: data.language,
+      result: result.choices[0].text,
+    });
   } catch (err) {
     if (err instanceof ZodError) {
       return res.status(422).json({ errors: err.issues });

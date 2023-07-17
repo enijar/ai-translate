@@ -3,22 +3,27 @@ import { HomeContainer, HomeForm, HomeResponse, HomeResponses, HomeWrapper } fro
 import languages from "@/../../shared/languages";
 
 type Response = {
-  input: string;
-  output: string;
+  text: string;
+  language: string;
+  result: string;
 };
 
 export default function Home() {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const selectRef = React.useRef<HTMLSelectElement>(null);
 
+  const [loading, setLoading] = React.useState(false);
+
   const [responses, setResponses] = React.useState<Response[]>([
     {
-      input: "Hello, my name is Alice",
-      output: "\n\nBonjour, je m'appelle Alice.",
+      text: "Hello, my name is Alice",
+      language: "french",
+      result: "\n\nBonjour, je m'appelle Alice.",
     },
     {
-      input: "Hello, my name is Bob",
-      output: "\n\nBonjour, je m'appelle Bob.",
+      text: "Hello, my name is Bob",
+      language: "french",
+      result: "\n\nBonjour, je m'appelle Bob.",
     },
   ]);
 
@@ -30,10 +35,12 @@ export default function Home() {
             return (
               <HomeResponse key={index}>
                 <h5>
-                  <em>{response.input}</em>
+                  Text: <em>{response.text}</em>
+                  <br />
+                  Language: <em>{response.language}</em>
                 </h5>
                 <code>
-                  <pre>{response.output}</pre>
+                  <pre>{response.result}</pre>
                 </code>
               </HomeResponse>
             );
@@ -43,6 +50,8 @@ export default function Home() {
       <HomeForm
         onSubmit={(event) => {
           event.preventDefault();
+          if (loading) return;
+          setLoading(true);
           const input = inputRef.current!;
           const select = selectRef.current!;
           const text = input.value.trim();
@@ -52,8 +61,15 @@ export default function Home() {
         }}
       >
         <HomeContainer>
-          <input ref={inputRef} type="text" name="text" autoFocus placeholder="Enter text for translation..." />
-          <select ref={selectRef} name="language">
+          <input
+            ref={inputRef}
+            type="text"
+            name="text"
+            autoFocus
+            placeholder="Enter text for translation..."
+            disabled={loading}
+          />
+          <select ref={selectRef} name="language" disabled={loading}>
             <option value="">Translate to:</option>
             {languages.map((language, index) => {
               return (
@@ -63,7 +79,9 @@ export default function Home() {
               );
             })}
           </select>
-          <button type="submit">Translate</button>
+          <button type="submit" disabled={loading}>
+            Translate
+          </button>
         </HomeContainer>
       </HomeForm>
     </HomeWrapper>
