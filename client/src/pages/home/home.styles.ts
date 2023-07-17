@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+export const HomeContainer = styled.div`
+  width: 100%;
+  max-width: 80ch;
+  margin-inline: auto;
+  position: relative;
+`;
+
 export const HomeLoader = styled.div`
   width: 100%;
   display: flex;
@@ -7,10 +14,15 @@ export const HomeLoader = styled.div`
   justify-content: center;
 `;
 
-export const HomeContainer = styled.div`
+export const HomeError = styled.div`
   width: 100%;
-  max-width: 80ch;
-  margin-inline: auto;
+  font-style: italic;
+  font-size: 0.75em;
+  color: crimson;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(calc(-100% - 0.75em));
 `;
 
 export const HomeForm = styled.form`

@@ -1,6 +1,7 @@
 import React from "react";
 import {
   HomeContainer,
+  HomeError,
   HomeForm,
   HomeLoader,
   HomeResponse,
@@ -23,6 +24,7 @@ export default function Home() {
   const selectRef = React.useRef<HTMLSelectElement>(null);
 
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const [responses, setResponses] = React.useState<Response[]>([]);
 
@@ -62,12 +64,21 @@ export default function Home() {
         onSubmit={async (event) => {
           event.preventDefault();
           if (loading) return;
-          setLoading(true);
-          const responses = responsesRef.current!;
           const input = inputRef.current!;
           const select = selectRef.current!;
           const text = input.value.trim();
           const language = select.value;
+          if (text.length === 0) {
+            return setError("Enter text for translation");
+          }
+          if (text.length > 500) {
+            return setError("Text must be 500 or less characters");
+          }
+          if (language.length === 0) {
+            return setError("Select a language to translate to");
+          }
+          setError(null);
+          setLoading(true);
           try {
             const res = await fetch(`${config.apiUrl}/api/translate`, {
               method: "post",
@@ -83,12 +94,14 @@ export default function Home() {
             }
           } catch (err) {
             console.error(err);
+            setError("Server error, try again");
           } finally {
             setLoading(false);
           }
         }}
       >
         <HomeContainer>
+          {error !== null && <HomeError>{error}</HomeError>}
           <input
             ref={inputRef}
             type="text"
