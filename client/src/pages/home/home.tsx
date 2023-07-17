@@ -1,7 +1,15 @@
 import React from "react";
-import { HomeContainer, HomeForm, HomeResponse, HomeResponses, HomeWrapper } from "@/pages/home/home.styles";
+import {
+  HomeContainer,
+  HomeForm,
+  HomeLoader,
+  HomeResponse,
+  HomeResponses,
+  HomeWrapper,
+} from "@/pages/home/home.styles";
 import languages from "@/../../shared/languages";
 import config from "@/config";
+import Loader from "@/components/loader/loader";
 
 type Response = {
   text: string;
@@ -10,27 +18,17 @@ type Response = {
 };
 
 export default function Home() {
+  const responsesRef = React.useRef<HTMLElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const selectRef = React.useRef<HTMLSelectElement>(null);
 
   const [loading, setLoading] = React.useState(false);
 
-  const [responses, setResponses] = React.useState<Response[]>([
-    {
-      text: "Hello, my name is Alice",
-      language: "french",
-      result: "\n\nBonjour, je m'appelle Alice.",
-    },
-    {
-      text: "Hello, my name is Bob",
-      language: "french",
-      result: "\n\nBonjour, je m'appelle Bob.",
-    },
-  ]);
+  const [responses, setResponses] = React.useState<Response[]>([]);
 
   return (
     <HomeWrapper>
-      <HomeResponses>
+      <HomeResponses ref={responsesRef}>
         <HomeContainer>
           {responses.map((response, index) => {
             return (
@@ -46,6 +44,11 @@ export default function Home() {
               </HomeResponse>
             );
           })}
+          {loading && (
+            <HomeLoader>
+              <Loader />
+            </HomeLoader>
+          )}
         </HomeContainer>
       </HomeResponses>
       <HomeForm
@@ -53,6 +56,7 @@ export default function Home() {
           event.preventDefault();
           if (loading) return;
           setLoading(true);
+          const responses = responsesRef.current!;
           const input = inputRef.current!;
           const select = selectRef.current!;
           const text = input.value.trim();
@@ -65,15 +69,17 @@ export default function Home() {
               },
               body: JSON.stringify({ text, language }),
             });
-            const response: Response = await res.json();
-            setResponses((responses) => [...responses, response]);
+            if (res.ok) {
+              const response: Response = await res.json();
+              setResponses((responses) => [...responses, response]);
+              input.value = "";
+              responses.scrollTop = responses.scrollHeight;
+            }
           } catch (err) {
             console.error(err);
           } finally {
             setLoading(false);
           }
-          input.value = "";
-          console.log({ text, language });
         }}
       >
         <HomeContainer>

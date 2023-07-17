@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+export const HomeLoader = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const HomeContainer = styled.div`
   width: 100%;
   max-width: 80ch;
