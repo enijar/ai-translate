@@ -6,7 +6,7 @@ Translate English text into different languages.
 
 ### Demo
 
-[![Demo](.github/demo.mp4)]
+[![Demo]](.github/demo.mp4)
 
 ### Getting Started
 
