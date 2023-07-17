@@ -1,5 +1,5 @@
 import React from "react";
-import { HomeForm, HomeResponse, HomeResponses, HomeWrapper } from "@/pages/home/home.styles";
+import { HomeContainer, HomeForm, HomeResponse, HomeResponses, HomeWrapper } from "@/pages/home/home.styles";
 import languages from "@/../../shared/languages";
 
 type Response = {
@@ -25,18 +25,20 @@ export default function Home() {
   return (
     <HomeWrapper>
       <HomeResponses>
-        {responses.map((response, index) => {
-          return (
-            <HomeResponse key={index}>
-              <h5>
-                <em>{response.input}</em>
-              </h5>
-              <code>
-                <pre>{response.output}</pre>
-              </code>
-            </HomeResponse>
-          );
-        })}
+        <HomeContainer>
+          {responses.map((response, index) => {
+            return (
+              <HomeResponse key={index}>
+                <h5>
+                  <em>{response.input}</em>
+                </h5>
+                <code>
+                  <pre>{response.output}</pre>
+                </code>
+              </HomeResponse>
+            );
+          })}
+        </HomeContainer>
       </HomeResponses>
       <HomeForm
         onSubmit={(event) => {
@@ -49,18 +51,20 @@ export default function Home() {
           console.log({ text, language });
         }}
       >
-        <input ref={inputRef} type="text" name="text" autoFocus placeholder="Enter text for translation..." />
-        <select ref={selectRef} name="language">
-          <option value="">Translate to:</option>
-          {languages.map((language, index) => {
-            return (
-              <option key={index} value={language}>
-                {language}
-              </option>
-            );
-          })}
-        </select>
-        <button type="submit">Translate</button>
+        <HomeContainer>
+          <input ref={inputRef} type="text" name="text" autoFocus placeholder="Enter text for translation..." />
+          <select ref={selectRef} name="language">
+            <option value="">Translate to:</option>
+            {languages.map((language, index) => {
+              return (
+                <option key={index} value={language}>
+                  {language}
+                </option>
+              );
+            })}
+          </select>
+          <button type="submit">Translate</button>
+        </HomeContainer>
       </HomeForm>
     </HomeWrapper>
   );
