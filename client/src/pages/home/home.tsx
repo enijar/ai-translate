@@ -26,6 +26,13 @@ export default function Home() {
 
   const [responses, setResponses] = React.useState<Response[]>([]);
 
+  React.useLayoutEffect(() => {
+    const responses = responsesRef.current!;
+    const input = inputRef.current!;
+    responses.scrollTop = responses.scrollHeight;
+    input.focus();
+  }, [responses]);
+
   return (
     <HomeWrapper>
       <HomeResponses ref={responsesRef}>
@@ -73,7 +80,6 @@ export default function Home() {
               const response: Response = await res.json();
               setResponses((responses) => [...responses, response]);
               input.value = "";
-              responses.scrollTop = responses.scrollHeight;
             }
           } catch (err) {
             console.error(err);
