@@ -4,6 +4,16 @@ import { Configuration, OpenAIApi } from "openai";
 import config from "../config";
 import languages from "../../../shared/languages";
 
+type ApiResponse = {
+  text: string;
+  language: string;
+  result: string;
+};
+
+type CacheKey = `${ApiResponse["text"]}-${ApiResponse["language"]}`;
+
+const cache = new Map<CacheKey, ApiResponse>();
+
 const configuration = new Configuration({
   apiKey: config.openAiApiKey,
 });
@@ -47,6 +57,11 @@ export default async function translate(req: Request, res: Response) {
       return res.status(422).json({ errors: [{ message: `Invalid language. Must be one of ${languages.join(",")}` }] });
     }
 
+    const key: CacheKey = `${data.text}-${data.language}`;
+    if (cache.has(key)) {
+      return res.json(cache.get(key));
+    }
+
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: generatePrompt(data.text, data.language),
@@ -59,11 +74,15 @@ export default async function translate(req: Request, res: Response) {
       return res.status(404).json({ errors: [{ message: "No result" }] });
     }
 
-    res.json({
+    const apiResponse: ApiResponse = {
       text: data.text,
       language: data.language,
       result: result.choices[0].text,
-    });
+    };
+
+    cache.set(key, apiResponse);
+
+    res.json(apiResponse);
   } catch (err) {
     if (err instanceof ZodError) {
       return res.status(422).json({ errors: err.issues });
