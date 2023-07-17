@@ -1,6 +1,6 @@
-# Web Template
+# AI Translate
 
-Opinionated template for building modern and scalable web projects.
+Translate English text into different languages
 
 ### Install
 
