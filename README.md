@@ -4,6 +4,10 @@ Translate English text into different languages.
 
 > Generate and use your own [Open API key](https://platform.openai.com/account/api-keys)
 
+### Demo
+
+[![Demo](.github/demo.mp4)]
+
 ### Getting Started
 
 Set up `ENV_VARS`:
