@@ -1,24 +1,16 @@
 # AI Translate
 
-Translate English text into different languages
-
-### Install
-
-```shell
-npx degit enijar/web-template project-name
-cd project-name
-```
+Translate English text into different languages.
 
 ### Getting Started
 
 Set up `ENV_VARS`:
 
 ```shell
-cp client/.env.example client/.env
-cp server/.env.example server/.env
+cp .env.example .env
 ```
 
-Start app in development mode:
+Run app in development mode:
 
 ```shell
 nvm use # uses supported Node version for this project
@@ -31,8 +23,7 @@ npm start
 Set up `ENV_VARS`:
 
 ```shell
-cp client/.env.example client/.env
-cp server/.env.example server/.env
+cp .env.example .env
 ```
 
 Build app in production mode:
