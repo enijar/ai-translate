@@ -1,6 +1,7 @@
 import React from "react";
 import { HomeContainer, HomeForm, HomeResponse, HomeResponses, HomeWrapper } from "@/pages/home/home.styles";
 import languages from "@/../../shared/languages";
+import config from "@/config";
 
 type Response = {
   text: string;
@@ -48,7 +49,7 @@ export default function Home() {
         </HomeContainer>
       </HomeResponses>
       <HomeForm
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
           if (loading) return;
           setLoading(true);
@@ -56,6 +57,21 @@ export default function Home() {
           const select = selectRef.current!;
           const text = input.value.trim();
           const language = select.value;
+          try {
+            const res = await fetch(`${config.apiUrl}/api/translate`, {
+              method: "post",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ text, language }),
+            });
+            const response: Response = await res.json();
+            setResponses((responses) => [...responses, response]);
+          } catch (err) {
+            console.error(err);
+          } finally {
+            setLoading(false);
+          }
           input.value = "";
           console.log({ text, language });
         }}
