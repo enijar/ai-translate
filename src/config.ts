@@ -10,6 +10,7 @@ const env = z.object({
   DATABASE_DIALECT: z.enum(["mysql", "sqlite"]),
   DATABASE_USERNAME: z.string(),
   DATABASE_PASSWORD: z.string(),
+  OPEN_AI_APK_KEY: z.string(),
 });
 
 env.parse(process.env);
@@ -32,6 +33,7 @@ const config = {
     password: process.env.DATABASE_PASSWORD,
     models: [User],
   },
+  openAiApiKey: process.env.OPEN_AI_APK_KEY,
 };
 
 export default config;
