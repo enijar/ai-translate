@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import z, { ZodError } from "zod";
 import { Configuration, OpenAIApi } from "openai";
 import config from "../config";
+import languages from "../../../shared/languages";
 
 const configuration = new Configuration({
   apiKey: config.openAiApiKey,
@@ -10,22 +11,7 @@ const openai = new OpenAIApi(configuration);
 
 const requestBody = z.object({
   text: z.string().min(1).max(500),
-  language: z
-    .enum([
-      "mandarin",
-      "spanish",
-      "hindi",
-      "portuguese",
-      "bengali",
-      "russian",
-      "japanese",
-      "spanish",
-      "italian",
-      "french",
-      "german",
-      "dutch",
-    ])
-    .transform((language) => language.toLowerCase()),
+  language: z.string().transform((language) => language.toLowerCase()),
 });
 
 const openAiApiResponse = z.object({
@@ -56,6 +42,10 @@ function generatePrompt(text: string, language: string) {
 export default async function translate(req: Request, res: Response) {
   try {
     const data = requestBody.parse(req.body);
+
+    if (!languages.includes(data.language)) {
+      return res.status(422).json({ errors: [{ message: `Invalid language. Must be one of ${languages.join(",")}` }] });
+    }
 
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
