@@ -6,7 +6,7 @@ Translate English text into different languages.
 
 ### Demo
 
-[![Demo]](.github/demo.mp4)
+https://github.com/enijar/ai-translate/assets/5284715/d455e6d2-d305-40f0-82c5-6b62ea100578
 
 ### Getting Started
 
