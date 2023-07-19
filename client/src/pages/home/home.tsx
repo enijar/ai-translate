@@ -80,7 +80,7 @@ export default function Home() {
           setError(null);
           setLoading(true);
           try {
-            const res = await fetch(`${config.apiUrl}/api/translate`, {
+            const res = await fetch(`${config.apiUrl}/api/translate-text`, {
               method: "post",
               headers: {
                 "Content-Type": "application/json",

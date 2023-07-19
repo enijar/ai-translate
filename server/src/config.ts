@@ -1,3 +1,4 @@
+import * as path from "node:path";
 import z from "zod";
 import User from "./models/user";
 
@@ -34,6 +35,7 @@ const config = {
     models: [User],
   },
   openAiApiKey: process.env.OPEN_AI_APK_KEY,
+  storagePath: path.resolve(__dirname, "..", "storage"),
 };
 
 export default config;
